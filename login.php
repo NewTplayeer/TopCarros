@@ -2,6 +2,8 @@
 session_start();
 require 'config.php';
 
+$erro = ''; // Variável para armazenar mensagens de erro
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $senha = $_POST["senha"];
@@ -22,10 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: index.html");
             exit();
         } else {
-            echo "<p class='erro'>Senha incorreta.</p>";
+            $erro = "Senha incorreta.";
         }
     } else {
-        echo "<p class='erro'>Usuário não encontrado.</p>";
+        $erro = "Usuário não encontrado.";
     }
 }
 ?>
@@ -36,10 +38,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="css/login.css">
+    <style>
+        .erro-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>Login</h2>
+        <?php if (!empty($erro)): ?>
+            <div class="erro-danger"><?php echo $erro; ?></div>
+        <?php endif; ?>
         <form method="POST">
             Email: <input type="email" name="email" required><br>
             Senha: <input type="password" name="senha" required><br>
