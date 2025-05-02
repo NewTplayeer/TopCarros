@@ -58,7 +58,43 @@
     <div id="lista-carrinho" class="mt-4"></div>
 
     <hr />
+<style>
+  /* Estilos para o carrinho */
+.btn-remover-custom {
+    color: #dc3545;
+    border-color: #dc3545;
+}
 
+.btn-remover-custom:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Estilos para as opções de frete */
+.form-check-input[type="radio"] {
+    transform: scale(1.2);
+    margin-top: 0.3rem;
+}
+
+.form-check-label h5 {
+    margin-left: 0.5rem;
+}
+
+.card:hover {
+    border-color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+#resumo-frete div {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Ícones Bootstrap */
+.bi {
+    vertical-align: -.125em;
+}
+</style>
     <!-- Adicione este campo no formulário de frete -->
 <div class="row mb-4">
   <div class="col-md-6">
