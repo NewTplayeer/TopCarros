@@ -406,14 +406,26 @@ const CONFIG_LOJA = {
                             .replace(/(\d{5})(\d)/, '$1-$2')
                             .substring(0, 9);
   }
-  
   function finalizarCompra() {
     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    
     if (carrinho.length === 0) {
-      alert("Seu carrinho está vazio!");
+      // Modal de erro se o carrinho estiver vazio
+      const modalErro = new bootstrap.Modal(document.getElementById('modalCarrinhoVazio'));
+      modalErro.show();
       return;
     }
-    alert("Compra finalizada com sucesso! Total: " + document.getElementById('total').textContent);
-    localStorage.removeItem('carrinho');
-    window.location.href = 'index.html';
+  
+    // Configura o modal de sucesso
+    document.getElementById('total-compra').textContent = document.getElementById('total').textContent;
+    
+    // Mostra o modal
+    const modalConfirmacao = new bootstrap.Modal(document.getElementById('modalConfirmacao'));
+    modalConfirmacao.show();
+    
+    // Limpa o carrinho quando o modal for fechado
+    document.getElementById('modalConfirmacao').addEventListener('hidden.bs.modal', function() {
+      localStorage.removeItem('carrinho');
+      window.location.href = 'index.html';
+    });
   }

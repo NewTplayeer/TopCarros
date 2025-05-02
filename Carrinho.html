@@ -86,6 +86,51 @@
     </div>
   </section>
 
+  <!-- Modal Carrinho Vazio -->
+<div class="modal fade" id="modalCarrinhoVazio" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Carrinho Vazio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="bi bi-cart-x-fill text-warning" style="font-size: 3rem;"></i>
+        <p class="mt-3">Seu carrinho está vazio. Adicione itens antes de finalizar.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <a href="index.html" class="btn btn-primary">Ver Produtos</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal de Confirmação -->
+<div class="modal fade" id="modalConfirmacao" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Compra Finalizada!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+          <h4 class="mt-3">Obrigado por sua compra!</h4>
+          <p>Seu pedido foi processado com sucesso.</p>
+          <div class="alert alert-success">
+            <strong>Total:</strong> <span id="total-compra"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Voltar à Loja</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- Rodapé -->
   <footer class="bg-dark text-white text-center py-4">
     <p>&copy; 2025 TopCarros. Todos os direitos reservados.</p>
