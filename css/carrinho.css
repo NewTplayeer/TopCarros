@@ -1,0 +1,101 @@
+body {
+    background-color: #f8f9fa;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  .table thead th {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  .table img {
+    border-radius: 8px;
+  }
+  
+  .btn-success {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .container h2 {
+    font-weight: 600;
+  }
+  
+  .finalizar-box {
+    border-top: 2px solid #ccc;
+    margin-top: 20px;
+    padding-top: 15px;
+  }
+  
+  @media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;
+    }
+  }
+  
+/* remover */
+  .btn-remover-custom {
+    background-color: #00e1ff; 
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-remover-custom:hover {
+    background-color: #00e1ff81; 
+}
+
+/* finalizar compra */
+.btn-customfinish {
+  background-color: #00e1ff; /* essa será a cor aplicada */
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-customfinish:hover {
+  background-color: #00b7ffb5;
+  transform: scale(1.05);
+}
+
+.btn-customfinish:active {
+  transform: scale(0.95);
+}
+
+/* Continuar */
+.btn-customcontinue {
+  background-color: #00b7ffb5 !important;
+  font-weight: bold;
+}
+
+/* Calcular */
+
+.btn.btn-outline-calcular {
+  background-color: #00e1ff;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.btn.btn-outline-calcular:hover {
+  background-color: #00b7ffb5;
+  transform: scale(1.05);
+}
+
+.btn.btn-outline-calcular:active {
+  transform: scale(0.95);
+}
