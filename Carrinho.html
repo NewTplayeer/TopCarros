@@ -41,24 +41,21 @@
     #lista-carrinho .row:hover {
       background-color: #f8f9fa;
     }
-  </style>
-</head>
+    
+  /* Estilo para destacar a opção selecionada */
+.form-check-input:checked ~ .card-body {
+    background-color: #f8f9fa;
+    border-left: 3px solid #0d6efd;
+}
 
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">TopCarros</a>
-    </div>
-  </nav>
+.valor-frete {
+    color: #198754;
+    font-size: 1.1rem;
+}
 
-  <!-- Carrinho -->
-  <section class="container py-5">
-    <h2 class="text-center mb-4">Carrinho de Compras</h2>
-    <div id="lista-carrinho" class="mt-4"></div>
-
-    <hr />
-<style>
+.prazo-frete {
+    color: #6c757d;
+}
   /* Estilos para o carrinho */
 .btn-remover-custom {
     color: #dc3545;
@@ -94,7 +91,24 @@
 .bi {
     vertical-align: -.125em;
 }
-</style>
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">TopCarros</a>
+    </div>
+  </nav>
+
+  <!-- Carrinho -->
+  <section class="container py-5">
+    <h2 class="text-center mb-4">Carrinho de Compras</h2>
+    <div id="lista-carrinho" class="mt-4"></div>
+
+    <hr />
+
     <!-- Adicione este campo no formulário de frete -->
 <div class="row mb-4">
   <div class="col-md-6">
