@@ -66,10 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            width: 300px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 400px; /* Aumentado para 400px */
             text-align: center;
         }
 
@@ -77,53 +77,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #721c24;
             background-color: #f8d7da;
             border: 1px solid #f5c6cb;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
             text-align: center;
+            font-size: 15px;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin: 8px 0;
+            padding: 12px;
+            margin: 10px 0;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 15px;
         }
 
         button {
             background-color: #4CAF50;
             color: white;
-            padding: 12px 20px;
+            padding: 14px 25px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 15px;
+            width: 100%;
         }
 
         button:hover {
             background-color: #45a049;
-            transform: scale(1.05);
+            transform: scale(1.02);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         button:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
         }
 
         a {
             display: inline-block;
-            margin-top: 15px;
+            margin-top: 20px;
             color: #333;
             text-decoration: none;
             transition: color 0.3s;
+            font-size: 15px;
         }
 
         a:hover {
             color: #4CAF50;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 24px;
         }
     </style>
 </head>
@@ -142,7 +152,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-        // Efeito adicional quando o mouse está sobre o botão
         const loginBtn = document.getElementById('loginBtn');
         
         loginBtn.addEventListener('mouseover', function() {
