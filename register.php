@@ -1,21 +1,18 @@
 <?php
-require 'config.php';
+require_once '../includes/conexao.php';
 
-$mensagem = "";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = $_POST["nome"];
-    $email = $_POST["email"];
-    $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT);
-
-    $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $nome, $email, $senha);
 
     if ($stmt->execute()) {
-        $mensagem = "<div class='mensagem sucesso'>Cadastro realizado com sucesso! <a href='login.php'>Entrar</a></div>";
+        echo "Usuário cadastrado com sucesso.";
     } else {
-        $mensagem = "<div class='mensagem erro'>Erro: " . $stmt->error . "</div>";
+        echo "Erro ao cadastrar: " . $conn->error;
     }
 }
 ?>
