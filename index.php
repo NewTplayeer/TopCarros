@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopCarros - Venda de Veículos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+   <?php session_start(); ?>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="">TopCarros</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <?php if (isset($_SESSION['usuario_email'])): ?>
+                    <li class="nav-item">
+                        <span class="nav-link">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_email']) ?>!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Sair</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Registro</a>
+                    </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="Carrinho.html">Carrinho</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <!-- Banner -->
+    <header class="bg-dark text-white text-center py-5">
+        <h1 class="display-4">Bem-vindo à TopCarros!</h1>
+        <p class="lead">Encontre o carro dos seus sonhos</p>
+    </header>
+
+    <!-- Filtro por Marca -->
+    <section class="container mt-5">
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-2">
+                <label for="filtroMarca" class="form-label">Filtrar por marca:</label>
+                <select class="form-select" id="filtroMarca">
+                    <option value="">Todas</option>
+                    <option value="Audi">Audi</option>
+                    <option value="Ford">Ford</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Dodge">Dodge</option>
+                    <option value="Porsche">Porsche</option>
+                    <option value="Volkswagen">Volkswagen</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo -->
+    <section class="container py-5">
+        <h2 class="text-center mb-4">Catálogo de Veículos</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            <!-- Card: Audi A4 -->
+            <div class="col car-card" data-marca="Audi">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/AudiA4.jpg" class="card-img-top" alt="Audi">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Audi A4</h5>
+                        <p class="card-text">R$ 600.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('Audi A4', 600000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Mustang -->
+            <div class="col car-card" data-marca="Ford">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/MustangGT.jpg" class="card-img-top" alt="Mustang">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Mustang</h5>
+                        <p class="card-text">R$ 900.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('Mustang', 900000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Card: Civic -->
+            <div class="col car-card" data-marca="Honda">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/CivicType.jpg" class="card-img-top" alt="Honda">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Civic Type R</h5>
+                        <p class="card-text">R$ 800.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('CivicType', 800000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Subaru -->
+            <div class="col car-card" data-marca="Subaru">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/Subaru.jpg" class="card-img-top" alt="Subaru">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Subaru</h5>
+                        <p class="card-text">R$ 300.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('Subaru', 300000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Civic Eg6 -->
+            <div class="col car-card" data-marca="Honda">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/CivicEg6.jpg" class="card-img-top" alt="Honda">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Civic EG6</h5>
+                        <p class="card-text">R$ 450.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('Civic EG6', 450000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Audi R8 -->
+            <div class="col car-card" data-marca="Audi">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/AudiR8.jpg" class="card-img-top" alt="Audi">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Audi R8</h5>
+                        <p class="card-text">R$ 450.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('AudiR8', 450000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Dodge Ram -->
+            <div class="col car-card" data-marca="Dodge">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/DodgeRAM.jpg" class="card-img-top" alt="Dodge">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Dodge Ram</h5>
+                        <p class="card-text">R$ 480.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('DodgeRAM', 480000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Porsche GT3 RS -->
+            <div class="col car-card" data-marca="Porsche">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/PorscheGT3RS.jpg" class="card-img-top" alt="Porsche">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Porsche GT3 RS</h5>
+                        <p class="card-text">R$ 1.200.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('PorscheGT3RS', 1200000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Fusca -->
+            <div class="col car-card" data-marca="Volkswagen">
+                <div class="card h-100">
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo
+                    </div>
+                    <img src="img/Fuca.jpg" class="card-img-top" alt="Volkswagen">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Fusca</h5>
+                        <p class="card-text">R$ 100.000,00</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('Fusca', 100000.00)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2025 TopCarros. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script para o Carrinho -->
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>

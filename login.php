@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user = $result->fetch_assoc()) {
         if (password_verify($senha, $user['senha'])) {
             $_SESSION['usuario_id'] = $user['id'];
-            header("Location: ../dashboard.php");
+            $_SESSION['usuario_email'] = $email;
+            header("Location: index.php");
             exit();
         }
     }
