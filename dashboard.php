@@ -24,6 +24,8 @@ if ($stmt) {
         $user_data = $result_usuario->fetch_assoc();
         $usuario_nome = $user_data['nome'];
         $tipo_usuario = $user_data['tipo'];
+        // ARMAZENA O TIPO DE USUÁRIO NA SESSÃO
+        $_SESSION['tipo_usuario'] = $user_data['tipo'];
     } else {
         // Usuário não encontrado, ou problema. Redirecionar para login.
         session_destroy(); // Destroi a sessão para evitar loops
@@ -64,7 +66,7 @@ function listarMarcas($conn) {
              "{$nome_escaped}" .
              "<div>" .
              " <a href='marca_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a>" .
-             " <a href='marca_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger'>Excluir</a>" .
+             " <a href='marca_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger' onclick='return confirm(\"Tem certeza que deseja excluir esta marca? Isso também excluirá veículos e anúncios associados a ela!\");'>Excluir</a>" .
              "</div>" .
              "</li>";
     }
@@ -97,7 +99,7 @@ function listarVeiculos($conn) {
              "{$marca_escaped} {$modelo_escaped} - {$ano_escaped} R$ {$preco_escaped} " .
              "<div>" .
              "<a href='veiculo_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a> " .
-             "<a href='veiculo_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger'>Excluir</a>" .
+             "<a href='veiculo_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger' onclick='return confirm(\"Tem certeza que deseja excluir este veículo? Isso também excluirá todos os anúncios associados a ele!\");'>Excluir</a>" .
              "</div>" .
              "</li>";
     }
@@ -106,10 +108,10 @@ function listarVeiculos($conn) {
 
 function listarAnuncios($conn) {
     $sql = "SELECT a.id, u.nome AS usuario, m.nome AS marca, v.modelo, a.status
-            FROM anuncios a
-            JOIN usuarios u ON a.usuario_id = u.id
-            JOIN veiculos v ON a.veiculo_id = v.id
-            JOIN marcas m ON v.marca_id = m.id";
+             FROM anuncios a
+             JOIN usuarios u ON a.usuario_id = u.id
+             JOIN veiculos v ON a.veiculo_id = v.id
+             JOIN marcas m ON v.marca_id = m.id";
     $result = $conn->query($sql);
 
     if (!$result) {
@@ -133,8 +135,9 @@ function listarAnuncios($conn) {
         echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
              "{$usuario_escaped} anunciou {$marca_escaped} {$modelo_escaped} ({$status_escaped}) " .
              "<div>" .
-             "<a href='anuncio_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a> " .
-             "<a href='anuncio_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger'>Excluir</a>" .
+             // AQUI ESTÁ A MUDANÇA: O botão "Editar" agora leva para anuncio_list.php
+             " <a href='anuncio_list.php' class='btn btn-sm btn-info me-2'>Ver e Editar</a> " .
+             " <a href='anuncio_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger' onclick='return confirm(\"Tem certeza que deseja excluir este anúncio?\");'>Excluir</a>" .
              "</div>" .
              "</li>";
     }
@@ -147,30 +150,19 @@ function listarAnuncios($conn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard - TopCarros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
-    <style>
-        body { font-family: Arial, sans-serif; } /* Manter se não tiver um estilo global */
-        .container-dashboard { max-width: 960px; margin-top: 30px; margin-bottom: 30px;}
-        h2 { margin-top: 40px; margin-bottom: 20px;}
-        .admin-section { 
-            background: #f8f9fa; /* Cor de fundo mais clara do Bootstrap */
-            padding: 20px; 
-            margin-top: 20px; 
-            border-radius: 8px; /* Cantos arredondados */
-            border: 1px solid #e2e6ea; /* Borda suave */
-        }
-        .list-group-item div a { /* Ajusta o espaçamento dos botões dentro das listas */
-            margin-right: 0.5rem;
-        }
-    </style>
 </head>
 <body>
 <div class="container container-dashboard">
     <h1 class="mb-4">Bem-vindo, <?php echo htmlspecialchars($usuario_nome); ?>!</h1>
     <p class="lead">Tipo de usuário: <strong><?php echo htmlspecialchars($tipo_usuario); ?></strong></p>
-    <a href="logout.php" class="btn btn-warning mb-4">Sair</a>
+
+    <div class="d-flex justify-content-center mb-4">
+        <a href="logout.php" class="btn btn-warning">Sair</a>
+        <a href="index.php" class="btn btn-secondary btn-back-to-index">Voltar ao Início</a>
+    </div>
 
     <?php
     // Exibir mensagens de status vindas dos redirecionamentos (ex: após deletar)
@@ -205,6 +197,7 @@ function listarAnuncios($conn) {
         <?php listarAnuncios($conn); ?>
     </div>
 
-</div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

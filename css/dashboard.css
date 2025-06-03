@@ -1,0 +1,119 @@
+/* css/dashboard.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-bg: #f8f9fa;
+    --dark-text: #343a40;
+    --border-color: #dee2e6;
+    --white: #fff;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 0;
+}
+
+.container-dashboard {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-width: 960px;
+    width: 100%;
+}
+
+h1, h2 {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+p.lead {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.15rem;
+    color: var(--secondary-color);
+}
+
+.btn {
+    padding: 10px 25px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: var(--dark-text);
+}
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: var(--dark-text);
+}
+
+.btn-secondary.btn-back-to-index {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--white);
+    margin-left: 15px;
+}
+.btn-secondary.btn-back-to-index:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.admin-section {
+    background: var(--light-bg);
+    padding: 25px;
+    margin-top: 35px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.list-group-item {
+    border-color: var(--border-color);
+    margin-bottom: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+.list-group-item:hover {
+    background-color: #e9ecef;
+}
+
+.list-group-item div a {
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+/* Responsividade básica para telas menores */
+@media (max-width: 768px) {
+    .container-dashboard {
+        padding: 25px;
+        margin: 20px auto;
+    }
+    .d-flex.justify-content-start {
+        flex-direction: column;
+        align-items: center;
+    }
+    .btn-secondary.btn-back-to-index {
+        margin-left: 0;
+        margin-top: 15px;
+    }
+}

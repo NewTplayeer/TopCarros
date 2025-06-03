@@ -1,110 +1,53 @@
 <?php
 // veiculo_delete.php
-require_once 'config.php';
+session_start();
+require 'config.php';
 
-// Verifica se um ID de veículo foi passado via GET
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    header("Location: dashboard.php?status=error&message=ID de veículo inválido.");
+// Redireciona se não for admin
+if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] !== 'admin') {
+    header("Location: login.php");
     exit();
 }
 
-$veiculo_id = (int)$_GET['id'];
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $veiculo_id = $_GET['id'];
 
-// --- Parte 1: Confirmar a exclusão (Melhor Prática) ---
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Busca os dados do veículo para exibir na tela de confirmação
-    $stmt = $conn->prepare("SELECT modelo, imagem FROM veiculos WHERE id = ?");
-    if ($stmt === false) {
-        error_log("Erro ao preparar busca de veículo para exclusão: " . $conn->error);
-        header("Location: dashboard.php?status=error&message=Erro interno.");
-        exit();
-    }
-    $stmt->bind_param("i", $veiculo_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $veiculo = $result->fetch_assoc();
-    $stmt->close();
+    // Cuidado: Excluir um veículo pode causar problemas de integridade referencial
+    // se houver anúncios associados a ele. Considere:
+    // 1. Excluir os anúncios relacionados primeiro.
+    // 2. Definir o veiculo_id dos anúncios como NULL (se a coluna permitir).
+    // 3. Usar CASCADE DELETE na foreign key (definido no SQL do BD).
+    // Para simplificar, vou excluir os anúncios primeiro.
 
-    if (!$veiculo) {
-        header("Location: dashboard.php?status=error&message=Veículo não encontrado.");
-        exit();
-    }
-?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Confirmar Exclusão</title>
-    <link rel="stylesheet" href="css/login.css"> </head>
-<body>
-    <div class="container">
-        <h2>Confirmar Exclusão de Veículo</h2>
-        <p>Tem certeza que deseja deletar o veículo **"<?= htmlspecialchars($veiculo['modelo']) ?>"**?</p>
-        <?php if (!empty($veiculo['imagem'])): ?>
-            <p>A imagem associada **"<?= htmlspecialchars($veiculo['imagem']) ?>"** também será removida.</p>
-        <?php endif; ?>
-        <form method="post" action="veiculo_delete.php">
-            <input type="hidden" name="id" value="<?= $veiculo_id ?>">
-            <button type="submit" name="confirm_delete" value="yes">Sim, Deletar</button>
-            <a href="dashboard.php" class="btn-cancel">Não, Voltar</a>
-        </form>
-    </div>
-</body>
-</html>
-<?php
-    exit(); // Sai do script após exibir a página de confirmação
-}
+    try {
+        $conn->begin_transaction();
 
-// --- Parte 2: Executar a exclusão após a confirmação via POST ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete']) && $_POST['confirm_delete'] === 'yes') {
-    // 1. Busca o nome da imagem antes de deletar o registro do DB
-    $stmt_select_image = $conn->prepare("SELECT imagem FROM veiculos WHERE id = ?");
-    if ($stmt_select_image === false) {
-        error_log("Erro ao preparar busca de imagem para exclusão: " . $conn->error);
-        header("Location: dashboard.php?status=error&message=Erro interno ao buscar imagem.");
-        exit();
-    }
-    $stmt_select_image->bind_param("i", $veiculo_id);
-    $stmt_select_image->execute();
-    $result_image = $stmt_select_image->get_result();
-    $veiculo_data = $result_image->fetch_assoc();
-    $stmt_select_image->close();
+        // 1. Excluir anúncios associados a este veículo
+        $stmt_anuncios = $conn->prepare("DELETE FROM anuncios WHERE veiculo_id = ?");
+        $stmt_anuncios->bind_param("i", $veiculo_id);
+        $stmt_anuncios->execute();
+        $stmt_anuncios->close();
 
-    $imagem_path = null;
-    if ($veiculo_data && !empty($veiculo_data['imagem'])) {
-        $imagem_path = "uploads/" . $veiculo_data['imagem'];
-    }
-
-    // 2. Deleta o registro do banco de dados
-    $stmt_delete = $conn->prepare("DELETE FROM veiculos WHERE id = ?");
-    if ($stmt_delete === false) {
-        error_log("Erro ao preparar exclusão de veículo: " . $conn->error);
-        header("Location: dashboard.php?status=error&message=Erro interno ao deletar.");
-        exit();
-    }
-    $stmt_delete->bind_param("i", $veiculo_id);
-
-    if ($stmt_delete->execute()) {
-        // 3. Deleta o arquivo de imagem (se existir)
-        if ($imagem_path && file_exists($imagem_path)) {
-            if (unlink($imagem_path)) {
-                // Imagem deletada com sucesso
-            } else {
-                error_log("Erro ao deletar arquivo de imagem: " . $imagem_path);
-                // Pode exibir um aviso, mas o registro do DB foi deletado
-            }
+        // 2. Excluir o veículo
+        $stmt_veiculo = $conn->prepare("DELETE FROM veiculos WHERE id = ?");
+        $stmt_veiculo->bind_param("i", $veiculo_id);
+        if ($stmt_veiculo->execute()) {
+            $conn->commit();
+            header("Location: dashboard.php?status=success&message=" . urlencode("Veículo e anúncios associados excluídos com sucesso!"));
+        } else {
+            $conn->rollback();
+            header("Location: dashboard.php?status=error&message=" . urlencode("Erro ao excluir veículo: " . $stmt_veiculo->error));
         }
-        header("Location: dashboard.php?status=success&message=Veículo deletado com sucesso.");
-        exit();
-    } else {
-        error_log("Erro ao executar exclusão de veículo: " . $stmt_delete->error);
-        header("Location: dashboard.php?status=error&message=Erro ao deletar veículo.");
-        exit();
-    }
-    $stmt_delete->close();
-}
+        $stmt_veiculo->close();
 
-// Se o formulário não foi submetido via POST de confirmação, redireciona de volta
-header("Location: dashboard.php?status=error&message=Requisição inválida.");
+    } catch (mysqli_sql_exception $e) {
+        $conn->rollback();
+        error_log("Erro transacional ao excluir veículo: " . $e->getMessage());
+        header("Location: dashboard.php?status=error&message=" . urlencode("Erro de banco de dados ao excluir veículo."));
+    }
+
+} else {
+    header("Location: dashboard.php?status=error&message=" . urlencode("ID do veículo inválido."));
+}
 exit();
 ?>

@@ -1,0 +1,141 @@
+/* css/anunciar.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --light-bg: #f8f9fa;
+    --dark-text: #343a40;
+    --border-color: #dee2e6;
+    --white: #fff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Para empilhar o conteúdo */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container-anunciar {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-width: 500px; /* Largura máxima para o formulário */
+    width: 100%;
+    text-align: center; /* Centraliza o título */
+}
+
+h1 {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaçamento entre os elementos do formulário */
+    align-items: stretch; /* Garante que os inputs se estendam */
+}
+
+/* Estilo para labels */
+label {
+    align-self: flex-start; /* Alinha o label à esquerda */
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--dark-text);
+}
+
+/* Estilo para o select */
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--dark-text);
+    background-color: var(--white);
+    appearance: none; /* Remove estilo padrão do navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.8-6.1H18.3c-7.9%200-13.8%206.1-13.8%2013.8v101.4c0%207.9%206.1%2013.8%2013.8%2013.8h254.9c7.9%200%2013.8-6.1%2013.8-13.8V83.2c0-7.9-6.1-13.8-13.8-13.8z%22%2F%3E%3C%2Fsvg%3E'); /* Seta customizada */
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Estilo para o botão */
+button[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px; /* Espaço antes do botão */
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Efeito sutil ao passar o mouse */
+}
+
+/* Estilo para o link "Voltar" */
+.btn-back {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+/* Mensagens de sucesso/erro */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}

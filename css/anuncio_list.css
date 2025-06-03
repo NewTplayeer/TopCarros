@@ -1,0 +1,253 @@
+/* css/anuncio_list.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --light-bg: #f8f9fa;
+    --dark-text: #343a40;
+    --border-color: #dee2e6;
+    --white: #fff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px; /* Adiciona padding para telas menores */
+}
+
+.container-anuncio-list {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-width: 960px; /* Largura máxima para a lista de anúncios */
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+    gap: 15px; /* Espaçamento entre os botões */
+}
+
+.btn {
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex; /* Para alinhar o texto e ícones se houver */
+    align-items: center;
+    justify-content: center;
+    color: var(--white); /* Cor padrão para botões */
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.anuncio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Layout responsivo em grid */
+    gap: 30px; /* Espaço entre os cards */
+    justify-content: center; /* Centraliza cards quando não preenchem a linha */
+}
+
+.anuncio-item {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Garante que a imagem não vaze */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.anuncio-item:hover {
+    transform: translateY(-5px); /* Efeito de elevação ao passar o mouse */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.anuncio-item img {
+    width: 100%;
+    height: 200px; /* Altura fixa para as imagens */
+    object-fit: cover; /* Recorta a imagem para cobrir a área */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.anuncio-info {
+    padding: 20px;
+    text-align: left; /* Alinha o texto das informações */
+    flex-grow: 1; /* Faz as informações ocuparem o espaço restante */
+    display: flex;
+    flex-direction: column;
+}
+
+.anuncio-info h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.anuncio-info p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.anuncio-info .preco {
+    font-weight: bold;
+    color: var(--success-color);
+    font-size: 1.25em;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.acoes {
+    margin-top: auto; /* Empurra as ações para o final do card */
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita */
+    padding-top: 15px;
+    border-top: 1px solid #eee; /* Linha separadora */
+}
+
+.acoes a {
+    margin-left: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.acoes .delete-link {
+    background-color: var(--danger-color);
+    color: var(--white);
+}
+.acoes .delete-link:hover {
+    background-color: #c82333;
+}
+
+.no-anuncios {
+    text-align: center;
+    color: var(--secondary-color);
+    margin-top: 50px;
+    padding: 20px;
+    border: 1px dashed var(--border-color);
+    border-radius: 8px;
+    background-color: var(--white);
+}
+
+.no-anuncios a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+.no-anuncios a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para as mensagens de status */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: left;
+    width: 100%; /* Garante que o alerta ocupe a largura total */
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+/* Links de navegação fora do container principal */
+.bottom-links {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    justify-content: flex-start; /* Alinha à esquerda */
+    gap: 15px;
+}
+
+.bottom-links a {
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 400;
+    transition: background-color 0.3s ease;
+}
+
+.bottom-links a:hover {
+    background-color: #5a6268;
+}
+
+/* Responsividade para telas muito pequenas */
+@media (max-width: 576px) {
+    .container-anuncio-list {
+        padding: 20px;
+    }
+    .top-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .top-actions .btn {
+        width: 100%; /* Botões ocupam largura total */
+    }
+    .anuncio-grid {
+        grid-template-columns: 1fr; /* Um card por linha */
+    }
+    .anuncio-item img {
+        height: 180px;
+    }
+    .anuncio-info {
+        padding: 15px;
+    }
+    .bottom-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .bottom-links a {
+        text-align: center;
+    }
+}
