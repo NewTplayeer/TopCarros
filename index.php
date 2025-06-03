@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS personalizado -->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.php">DashBoard</a>
                 <li class="nav-item">
-                    <a class="nav-link" href="Carrinho.html">Carrinho</a>
+                    <a class="nav-link" href="Carrinho.php">Carrinho</a>
                 </li>
                 <li class="nav-item">
                         <a class="nav-link" href="logout.php">Sair</a>

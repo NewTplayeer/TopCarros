@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'DirtyLizard'; /* Escolha um nome para sua fonte */
+    src: url('../fonts/DirtyLizard.woff2') format('woff2'), /* Caminho para o arquivo WOFF2 */
+         url('../fonts/DirtyLizard.woff') format('woff'); /* Caminho para o arquivo WOFF */
+    /* src: url('../fonts/DirtyLizard.ttf') format('truetype'); */
+
+    font-weight: normal; /* Ou bold, se a fonte tiver essa variante */
+    font-style: normal;
+    font-display: swap; /* Importante para o desempenho: exibe uma fonte temporária enquanto carrega a customizada */
+}
+
+.bg-dark {
+    font-family: 'Arial';
+    --bs-bg-opacity: 1;
+    background-color: #FFA500 !important;
+}
+
+.badge.bg-dark {
+
+    color-scheme: #FFA500;
+    color: #ffffff
+    
+    !important;
+}
+
+/* Estilos para o link da marca (TopCarros) */
+.navbar-brand {
+    font-family: 'DirtyLizard', cursive; /* Usando a fonte que você adicionou */
+    font-size: 3.0em; /* Tamanho da fonte maior para o logo */
+    color: #00bbff; /* Exemplo: Dourado para o texto da marca */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+    padding: 0.5rem 0; /* Ajuste o padding se necessário */
+    margin-right: 20px; /* Espaço à direita do logo */
+}
+
+.navbar-brand:hover {
+    color: #FFA500; /* Cor ao passar o mouse */
+    text-decoration: none; /* Remover sublinhado ao passar o mouse */
+}
+
+/* Estilos para o botão "toggler" (o ícone de hambúrguer para mobile) */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5); /* Cor da borda do botão */
+    /* Background-color do botão ao abrir/fechar (pode ser necessário usar !important) */
+    /* background-color: #007bff; !important; */
+}
+
+/* Estilos para o ícone de hambúrguer dentro do botão */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    /* O SVG acima é o ícone padrão branco. Se você quiser mudar a cor do hambúrguer,
+       você precisa mudar o 'rgba(255, 255, 255, 0.8)' no SVG.
+       Por exemplo, para um hambúrguer preto, seria:
+       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    */
+}
+
+/* Estilos para quando o botão toggler está "colapsado" (mobile) */
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Muda a sombra ao focar */
+    outline: none; /* Remove o contorno padrão do foco */
+}

@@ -1,80 +1,122 @@
-/* Reset básico */
-
-*{
-    margin: 0;
-    padding: 0;
+/* Definição global para box-sizing para facilitar o layout */
+* {
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    color: #333;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Estilos para o corpo da página */
+body { /* CORREÇÃO: Removido o ponto, agora seleciona a tag <body> HTML */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(-45deg, #ee7752, #e7c83c, #23ccd5, #2364d5);
+    background-size: 400% 400%; /* Mantém o tamanho para a animação */
+    animation: gradient 15s ease infinite; /* Aplica a animação */
+    height: 100vh; /* Ocupa 100% da altura da viewport */
+    display: flex; /* Para centralizar o conteúdo vertical e horizontalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    overflow: hidden; /* Evita barras de rolagem se o conteúdo for maior que a tela devido ao gradiente */
 }
 
+/* Definição da animação de gradiente */
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Estilos para o contêiner principal do formulário */
 .container {
-    background-color: white;
-    padding: 2rem 3rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo branco com leve transparência */
+    padding: 40px;
+    border-radius: 15px; /* Cantos arredondados */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Sombra para profundidade */
+    width: 90%; /* CORREÇÃO: Usa porcentagem para ser mais responsivo */
+    max-width: 400px; /* Garante que não fique muito largo em telas grandes */
     text-align: center;
+}
+
+/* Estilos para mensagens de erro/perigo */
+.erro-danger {
+    color: #721c24; /* Texto vermelho escuro */
+    background-color: #f8d7da; /* Fundo vermelho claro */
+    border: 1px solid #f5c6cb; /* Borda vermelha */
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* Estilos para campos de input */
+input {
     width: 100%;
-    max-width: 400px;
-}
-
-h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-input[type="email"],
-input[type="password"] {
-    padding: 0.75rem;
-    margin-bottom: 1rem;
+    padding: 12px;
+    margin: 10px 0;
+    /* box-sizing: border-box; já definido globalmente, mas não faz mal repetir */
     border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border 0.3s;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transição para foco */
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus {
-    border-color: #2575fc;
-    outline: none;
+/* Estilos para o input em foco (quando clicado/digitando) */
+input:focus { /* MELHORIA: Adicionado estilo de foco */
+    border-color: #2364d5; /* Muda a cor da borda ao focar */
+    box-shadow: 0 0 0 0.2rem rgba(35, 100, 213, 0.25); /* Sombra para destacar */
+    outline: none; /* Remove o contorno padrão do navegador */
 }
 
+/* Estilos para botões */
 button {
-    background-color: #2575fc;
+    background-color: #4CAF50; /* Verde */
     color: white;
-    padding: 0.75rem;
+    padding: 14px 25px;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    border-radius: 6px;
+    cursor: pointer; /* Indica que é clicável */
+    font-size: 16px;
+    transition: all 0.3s ease; /* Transição suave para hover e active */
+    margin-top: 15px;
+    width: 100%;
 }
 
+/* Efeito hover para botões */
 button:hover {
-    background-color: #1a5edc;
+    background-color: #45a049; /* Verde mais escuro */
+    transform: scale(1.02); /* Aumenta ligeiramente */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
 }
 
+/* Efeito active para botões (quando clicado) */
+button:active {
+    transform: scale(0.98); /* Diminui ligeiramente */
+}
+
+/* Estilos para links */
 a {
-    display: block;
-    margin-top: 1rem;
-    color: #2575fc;
+    display: inline-block; /* Permite margin-top e padding */
+    margin-top: 20px;
+    color: #333;
     text-decoration: none;
-    font-size: 0.95rem;
+    transition: color 0.3s; /* Transição para hover */
+    font-size: 15px;
 }
 
+/* Efeito hover para links */
 a:hover {
-    text-decoration: underline;
+    color: #4CAF50; /* Muda para verde no hover */
 }
+
+/* Estilos para títulos h2 */
+h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 24px;
+} 
