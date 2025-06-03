@@ -27,9 +27,6 @@
                     <li class="nav-item">
                         <span class="nav-link">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_email']) ?>!</span>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Sair</a>
-                    </li>
                 <?php else: ?>
                     <li class="nav-item">
                         <a class="nav-link" href="login.php">Login</a>
@@ -39,8 +36,13 @@
                     </li>
                 <?php endif; ?>
                 <li class="nav-item">
+                    <a class="nav-link" href="dashboard.php">DashBoard</a>
+                <li class="nav-item">
                     <a class="nav-link" href="Carrinho.html">Carrinho</a>
                 </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Sair</a>
+                    </li>
             </ul>
         </div>
     </div>
