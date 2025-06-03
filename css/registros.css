@@ -1,0 +1,138 @@
+/* Definição global para box-sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilos para o corpo da página com o novo gradiente azul e laranja */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+
+    /* NOVO GRADIENTE: Azul para Laranja */
+    background: linear-gradient(-45deg, #007bff, #00bbff, #f79443, #FFA500);
+    background-size: 400% 400%;
+
+    animation: gradientAnimation 15s ease infinite;
+
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Animação para o novo gradiente */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Estilos para o contêiner principal do formulário */
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Estilos para mensagens de erro/perigo (mesmo que no login.css) */
+.erro-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* NOVO: Estilo para mensagem de sucesso (opcional, adicione se quiser) */
+.sucesso-message {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 15px;
+}
+
+
+/* Estilos para campos de input */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Estilos para o input em foco */
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Estilos para botões */
+button {
+    background-color: #FFA500; /* Laranja do gradiente */
+    color: white;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* Efeito hover para botões */
+button:hover {
+    background-color: #00bbff; /* Laranja mais escuro no hover */
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Efeito active para botões */
+button:active {
+    transform: scale(0.98);
+}
+
+/* Estilos para links */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 15px;
+}
+
+/* Efeito hover para links */
+a:hover {
+    color: #007bff; /* Azul do gradiente no hover */
+}
+
+/* Estilos para títulos h2 */
+h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 24px;
+}

@@ -27,7 +27,7 @@ if ($stmt) {
     } else {
         // Usuário não encontrado, ou problema. Redirecionar para login.
         session_destroy(); // Destroi a sessão para evitar loops
-        header("Location: login.php");
+        header("Location: login.php?status=error&message=Usuário não encontrado.");
         exit;
     }
     $stmt->close();
@@ -35,36 +35,40 @@ if ($stmt) {
     // Erro na preparação da consulta SQL (pode indicar problema de conexão ou sintaxe)
     error_log("Erro na preparação da consulta de usuário: " . $conn->error);
     // Em produção, talvez um erro mais amigável ou redirecionamento
-    header("Location: login.php"); // Redireciona em caso de erro crítico
+    header("Location: login.php?status=error&message=Erro interno no login."); // Redireciona em caso de erro crítico
     exit;
 }
 
-// REMOVIDA: A linha abaixo estava incorreta e sem sentido aqui.
-// $_SESSION['usuario_id'] = $user['id'];
-
-// --- Funções de Listagem (melhoradas com prepared statements como boa prática) ---
+// --- Funções de Listagem (ajustadas para os links de exclusão) ---
 
 function listarMarcas($conn) {
-    // Para consultas simples sem parâmetros, prepared statements são menos críticos, mas boa prática.
-    // O foco aqui é na segurança contra injeção quando há parâmetros.
     $sql = "SELECT id, nome FROM marcas";
     $result = $conn->query($sql);
 
     if (!$result) {
         error_log("Erro ao listar marcas: " . $conn->error);
-        echo "<p>Erro ao carregar marcas.</p>";
+        echo "<p class='alert alert-danger'>Erro ao carregar marcas.</p>";
+        return;
+    }
+    if ($result->num_rows === 0) {
+        echo "<p>Nenhuma marca cadastrada.</p>";
         return;
     }
 
+    echo "<ul class='list-group'>";
     while ($row = $result->fetch_assoc()) {
-        // Escapar saída para HTML
         $id_escaped = htmlspecialchars($row['id']);
         $nome_escaped = htmlspecialchars($row['nome']);
 
-        echo $nome_escaped .
-             " <a href='marca_edit.php?id={$id_escaped}'>Editar</a>" .
-             " <a href='marca_delete.php?id={$id_escaped}'>Excluir</a><br>";
+        echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
+             "{$nome_escaped}" .
+             "<div>" .
+             " <a href='marca_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a>" .
+             " <a href='marca_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger'>Excluir</a>" .
+             "</div>" .
+             "</li>";
     }
+    echo "</ul>";
 }
 
 function listarVeiculos($conn) {
@@ -73,22 +77,31 @@ function listarVeiculos($conn) {
 
     if (!$result) {
         error_log("Erro ao listar veículos: " . $conn->error);
-        echo "<p>Erro ao carregar veículos.</p>";
+        echo "<p class='alert alert-danger'>Erro ao carregar veículos.</p>";
+        return;
+    }
+    if ($result->num_rows === 0) {
+        echo "<p>Nenhum veículo cadastrado.</p>";
         return;
     }
 
+    echo "<ul class='list-group'>";
     while ($row = $result->fetch_assoc()) {
-        // Escapar saída para HTML
         $id_escaped = htmlspecialchars($row['id']);
         $marca_escaped = htmlspecialchars($row['marca']);
         $modelo_escaped = htmlspecialchars($row['modelo']);
         $ano_escaped = htmlspecialchars($row['ano']);
-        $preco_escaped = htmlspecialchars(number_format($row['preco'], 2, ',', '.')); // Formatar preço
+        $preco_escaped = htmlspecialchars(number_format($row['preco'], 2, ',', '.'));
 
-        echo "{$marca_escaped} {$modelo_escaped} - {$ano_escaped} R$ {$preco_escaped} ".
-             "<a href='veiculo_edit.php?id={$id_escaped}'>Editar</a> ".
-             "<a href='veiculo_delete.php?id={$id_escaped}'>Excluir</a><br>";
+        echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
+             "{$marca_escaped} {$modelo_escaped} - {$ano_escaped} R$ {$preco_escaped} " .
+             "<div>" .
+             "<a href='veiculo_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a> " .
+             "<a href='veiculo_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger'>Excluir</a>" .
+             "</div>" .
+             "</li>";
     }
+    echo "</ul>";
 }
 
 function listarAnuncios($conn) {
@@ -101,58 +114,97 @@ function listarAnuncios($conn) {
 
     if (!$result) {
         error_log("Erro ao listar anúncios: " . $conn->error);
-        echo "<p>Erro ao carregar anúncios.</p>";
+        echo "<p class='alert alert-danger'>Erro ao carregar anúncios.</p>";
+        return;
+    }
+    if ($result->num_rows === 0) {
+        echo "<p>Nenhum anúncio cadastrado.</p>";
         return;
     }
 
+    echo "<ul class='list-group'>";
     while ($a = $result->fetch_assoc()) {
-        // Escapar saída para HTML
         $id_escaped = htmlspecialchars($a['id']);
         $usuario_escaped = htmlspecialchars($a['usuario']);
         $marca_escaped = htmlspecialchars($a['marca']);
         $modelo_escaped = htmlspecialchars($a['modelo']);
         $status_escaped = htmlspecialchars($a['status']);
 
-        echo "{$usuario_escaped} anunciou {$marca_escaped} {$modelo_escaped} ({$status_escaped}) ".
-             "<a href='anuncio_edit.php?id={$id_escaped}'>Editar</a> ".
-             "<a href='anuncio_delete.php?id={$id_escaped}'>Excluir</a><br>";
+        echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
+             "{$usuario_escaped} anunciou {$marca_escaped} {$modelo_escaped} ({$status_escaped}) " .
+             "<div>" .
+             "<a href='anuncio_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a> " .
+             "<a href='anuncio_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger'>Excluir</a>" .
+             "</div>" .
+             "</li>";
     }
+    echo "</ul>";
 }
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
     <style>
-        body { font-family: Arial, sans-serif; }
-        h2 { margin-top: 40px; }
-        .admin-only { background: #f8f8f8; padding: 10px; margin: 10px 0; border-left: 5px solid #ccc; }
-        a { text-decoration: none; color: #007bff; margin-right: 10px; }
-        a:hover { text-decoration: underline; }
+        body { font-family: Arial, sans-serif; } /* Manter se não tiver um estilo global */
+        .container-dashboard { max-width: 960px; margin-top: 30px; margin-bottom: 30px;}
+        h2 { margin-top: 40px; margin-bottom: 20px;}
+        .admin-section { 
+            background: #f8f9fa; /* Cor de fundo mais clara do Bootstrap */
+            padding: 20px; 
+            margin-top: 20px; 
+            border-radius: 8px; /* Cantos arredondados */
+            border: 1px solid #e2e6ea; /* Borda suave */
+        }
+        .list-group-item div a { /* Ajusta o espaçamento dos botões dentro das listas */
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <body>
-<h1>Bem-vindo, <?php echo htmlspecialchars($usuario_nome); ?>!</h1>
-<p>Tipo de usuário: <strong><?php echo htmlspecialchars($tipo_usuario); ?></strong></p>
-<a href="logout.php">Sair</a>
+<div class="container container-dashboard">
+    <h1 class="mb-4">Bem-vindo, <?php echo htmlspecialchars($usuario_nome); ?>!</h1>
+    <p class="lead">Tipo de usuário: <strong><?php echo htmlspecialchars($tipo_usuario); ?></strong></p>
+    <a href="logout.php" class="btn btn-warning mb-4">Sair</a>
 
-<?php if ($tipo_usuario === 'admin'): ?>
-    <hr>
-    <h2>Gestão de Marcas</h2>
-    <a href="marca_add.php">Adicionar Nova Marca</a><br><br>
-    <div class="admin-only"><?php listarMarcas($conn); ?></div>
+    <?php
+    // Exibir mensagens de status vindas dos redirecionamentos (ex: após deletar)
+    if (isset($_GET['status']) && isset($_GET['message'])) {
+        $status_class = ($_GET['status'] == 'success') ? 'alert-success' : 'alert-danger';
+        echo '<div class="alert ' . $status_class . ' mt-3" role="alert">';
+        echo htmlspecialchars($_GET['message']);
+        echo '</div>';
+    }
+    ?>
 
-    <hr>
-    <h2>Gestão de Veículos</h2>
-    <a href="veiculo_add.php">Adicionar Novo Veículo</a><br><br>
-    <div class="admin-only"><?php listarVeiculos($conn); ?></div>
-<?php endif; ?>
+    <?php if ($tipo_usuario === 'admin'): ?>
+        <hr class="my-4">
+        <div class="admin-section">
+            <h2>Gestão de Marcas</h2>
+            <a href="marca_add.php" class="btn btn-primary mb-3">Adicionar Nova Marca</a>
+            <?php listarMarcas($conn); ?>
+        </div>
 
-<hr>
-<h2>Anúncios</h2>
-<a href="anuncio_add.php">Adicionar Novo Anúncio</a><br><br>
-<div><?php listarAnuncios($conn); ?></div>
+        <hr class="my-4">
+        <div class="admin-section">
+            <h2>Gestão de Veículos</h2>
+            <a href="veiculo_add.php" class="btn btn-primary mb-3">Adicionar Novo Veículo</a>
+            <?php listarVeiculos($conn); ?>
+        </div>
+    <?php endif; ?>
 
+    <hr class="my-4">
+    <div class="admin-section">
+        <h2>Anúncios</h2>
+        <a href="anuncio_add.php" class="btn btn-primary mb-3">Adicionar Novo Anúncio</a>
+        <?php listarAnuncios($conn); ?>
+    </div>
+
+</div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
