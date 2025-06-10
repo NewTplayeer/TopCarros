@@ -1,101 +1,236 @@
+@font-face {
+    font-family: 'DirtyLizard'; /* Nome da sua fonte personalizada */
+    src: url('../fonts/DirtyLizard.woff2') format('woff2'), /* Caminho para o arquivo WOFF2 */
+         url('../fonts/DirtyLizard.woff') format('woff'); /* Caminho para o arquivo WOFF */
+    /* Se você também tiver o arquivo .ttf, pode descomentar a linha abaixo: */
+    /* url('../fonts/DirtyLizard.ttf') format('truetype'); */
+
+    font-weight: normal; /* Define o peso da fonte (ajuste se a fonte tiver variantes) */
+    font-style: normal; /* Define o estilo da fonte */
+    font-display: swap; /* Importante: exibe uma fonte temporária enquanto carrega a customizada */
+}
+
 body {
-    background-color: #f8f9fa;
-  }
-  
-  .navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
-  
-  .table thead th {
-    background-color: #343a40;
-    color: white;
-  }
-  
-  .table img {
-    border-radius: 8px;
-  }
-  
-  .btn-success {
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  
-  .container h2 {
-    font-weight: 600;
-  }
-  
-  .finalizar-box {
-    border-top: 2px solid #ccc;
-    margin-top: 20px;
-    padding-top: 15px;
-  }
-  
-  @media (max-width: 768px) {
-    .table-responsive {
-      overflow-x: auto;
-    }
-  }
-  
-/* remover */
-  .btn-remover-custom {
-    background-color: #00e1ff; 
-    color: rgb(0, 0, 0);
-    border: none;
-    border-radius: 6px;
-    padding: 5px 10px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+    font-family: Arial, sans-serif; /* Fonte padrão para o corpo, como fallback */
+    background-color: #f8f9fa; /* Fundo claro para a página */
 }
 
-.btn-remover-custom:hover {
-    background-color: #00e1ff81; 
+/* --- Navbar (Barra de Navegação) --- */
+/* Estiliza a barra de navegação completa */
+.navbar.bg-light { /* Seletor específico para o fundo da navbar Bootstrap */
+    background-color: #343a40 !important; /* Fundo escuro */
+    border-bottom: 3px solid #00bbff; /* Borda inferior com sua cor principal */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave */
 }
 
-/* finalizar compra */
+/* Estilos para o link da marca "TopCarros" */
+.navbar-brand.navbar-TopCarros { /* Seletor mais específico para o logo */
+    font-family: 'DirtyLizard', cursive; /* Aplica sua fonte personalizada */
+    font-size: 2.8em; /* Tamanho do logo */
+    color: #00bbff; /* Cor principal do logo */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para o texto */
+    padding: 0.5rem 0; /* Espaçamento interno */
+    margin-right: 20px; /* Espaço à direita do logo */
+    text-decoration: none; /* Remove sublinhado padrão */
+    transition: color 0.3s ease; /* Transição suave na mudança de cor */
+}
+
+.navbar-brand.navbar-TopCarros:hover {
+    color: #FFA500; /* Cor laranja no hover */
+    text-decoration: none; /* Mantém sem sublinhado no hover */
+}
+
+/* Estilos para os links de navegação (Login, Sair, Carrinho, etc.) */
+.navbar-nav .nav-link {
+    color: #ffffff; /* Cor do texto dos links */
+    transition: color 0.3s ease; /* Transição suave na mudança de cor */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #00bbff; /* Cor azul no hover */
+}
+
+/* --- Seção Principal do Carrinho (Container) --- */
+.container.py-5 {
+    background-color: #ffffff; /* Fundo branco para o conteúdo principal */
+    border-radius: 8px; /* Cantos arredondados */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin-top: 30px; /* Espaço superior */
+    margin-bottom: 30px; /* Espaço inferior */
+    padding-bottom: 30px; /* Preenchimento interno na parte inferior */
+}
+
+h2.text-center.mb-4 {
+    color: #343a40; /* Cor escura para o título "Carrinho de Compras" */
+    margin-bottom: 1.5rem; /* Margem inferior */
+}
+
+/* --- Estilos para os Itens do Carrinho (se renderizados como cards) --- */
+#lista-carrinho .card {
+    border: 1px solid #eee; /* Borda suave */
+    margin-bottom: 15px; /* Espaço entre os cards */
+    border-radius: 8px; /* Cantos arredondados */
+    overflow: hidden; /* Garante que nada transborde */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra leve */
+}
+
+#lista-carrinho .card-body {
+    padding: 15px;
+    display: flex; /* Para alinhar imagem e texto */
+    align-items: center; /* Alinha verticalmente */
+}
+
+#lista-carrinho .card-img-top { /* Estilo para a imagem do carro no card */
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Recorta a imagem para preencher */
+    border-radius: 4px; /* Cantos arredondados na imagem */
+    margin-right: 15px; /* Espaço à direita da imagem */
+}
+
+#lista-carrinho .item-details h5 {
+    color: #343a40; /* Cor do título do item */
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+#lista-carrinho .item-details p {
+    color: #666; /* Cor do texto de detalhes do item */
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+/* --- Seção de Cálculo de Frete (CEP) --- */
+.row.mb-4 {
+    padding-left: 15px;
+    padding-right: 15px; /* Espaçamento interno */
+}
+
+.form-label {
+    font-weight: bold; /* Negrito para os rótulos */
+    color: #343a40; /* Cor escura para os rótulos */
+}
+
+/* Botão "Buscar" (CEP) */
+.btn-outline-secondary {
+    border-color: #00bbff; /* Borda azul */
+    color: #00bbff; /* Texto azul */
+    transition: all 0.3s ease; /* Transição suave */
+}
+
+.btn-outline-secondary:hover {
+    background-color: #00bbff; /* Fundo azul no hover */
+    color: #ffffff; /* Texto branco no hover */
+}
+
+/* Botão "Calcular Frete" (e outros .btn-primary se houver) */
+.btn-primary {
+    background-color: #00bbff; /* Fundo azul */
+    border-color: #00bbff; /* Borda azul */
+    transition: all 0.3s ease; /* Transição suave */
+}
+
+.btn-primary:hover {
+    background-color: #0099cc; /* Azul um pouco mais escuro no hover */
+    border-color: #0099cc; /* Borda mais escura no hover */
+}
+
+/* Card de "Detalhes do Endereço" */
+#detalhes-endereco {
+    border-color: #00bbff; /* Borda azul */
+}
+
+#detalhes-endereco .card-title {
+    color: #00bbff; /* Título azul */
+}
+
+/* --- Botões de Ação na Parte Inferior do Carrinho --- */
+.d-flex.justify-content-between.align-items-center {
+    margin-top: 30px; /* Espaço superior */
+    padding-top: 20px; /* Preenchimento superior */
+    border-top: 1px solid #eee; /* Linha divisória */
+}
+
+#total {
+    color: #FFA500; /* Cor laranja para o valor total */
+    font-size: 1.8em; /* Tamanho do texto do total */
+}
+
+/* Botão "Continuar Comprando" */
+.btn-customcontinue {
+    background-color: #FFA500 !important; /* Laranja forte (usado !important para garantir) */
+    color: #ffffff !important; /* Texto branco */
+    font-weight: bold; /* Negrito */
+    border: none !important; /* Sem borda */
+    padding: 10px 20px; /* Preenchimento */
+    border-radius: 5px; /* Cantos arredondados */
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.btn-customcontinue:hover {
+    background-color: #e08e00 !important; /* Laranja mais escuro no hover */
+}
+
+/* Botão "Finalizar Compra" */
 .btn-customfinish {
-  background-color: #00e1ff; /* essa será a cor aplicada */
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #00bbff !important; /* Azul forte (usado !important para garantir) */
+    color: #ffffff !important; /* Texto branco */
+    font-weight: bold; /* Negrito */
+    border: none !important; /* Sem borda */
+    padding: 10px 20px; /* Preenchimento */
+    border-radius: 5px; /* Cantos arredondados */
+    transition: background-color 0.3s ease; /* Transição suave */
 }
 
 .btn-customfinish:hover {
-  background-color: #00b7ffb5;
-  transform: scale(1.05);
+    background-color: #0099cc !important; /* Azul mais escuro no hover */
 }
 
-.btn-customfinish:active {
-  transform: scale(0.95);
+/* --- Modais (Carrinho Vazio e Confirmação) --- */
+/* Cabeçalho do modal de carrinho vazio */
+.modal-header.bg-warning {
+    background-color: #FFA500 !important; /* Laranja para o cabeçalho */
+    color: white !important; /* Texto branco */
 }
 
-/* Continuar */
-.btn-customcontinue {
-  background-color: #00b7ffb5 !important;
-  font-weight: bold;
+/* Cabeçalho do modal de confirmação de compra */
+.modal-content .modal-header {
+    background-color: #00bbff !important; /* Azul para o cabeçalho */
+    color: white !important; /* Texto branco */
 }
 
-/* Calcular */
-
-.btn.btn-outline-calcular {
-  background-color: #00e1ff;
-  color: #000;
-  border: none;
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  cursor: pointer;
+/* Ícones dentro dos modais */
+.modal-body .bi {
+    color: #FFA500 !important; /* Ícone de carrinho vazio (laranja) */
 }
 
-.btn.btn-outline-calcular:hover {
-  background-color: #00b7ffb5;
-  transform: scale(1.05);
+.modal-body .bi.text-success {
+    color: #28a745 !important; /* Ícone de sucesso (verde padrão Bootstrap) */
 }
 
-.btn.btn-outline-calcular:active {
-  transform: scale(0.95);
+/* Alerta de sucesso dentro do modal */
+.alert.alert-success {
+    background-color: #d4edda !important;
+    border-color: #c3e6cb !important;
+    color: #155724 !important;
+    font-weight: bold;
+}
+
+/* Botões primários dentro dos modais */
+.modal-footer .btn-primary {
+    background-color: #00bbff !important;
+    border-color: #00bbff !important;
+}
+
+.modal-footer .btn-primary:hover {
+    background-color: #0099cc !important;
+    border-color: #0099cc !important;
+}
+
+/* --- Rodapé --- */
+footer {
+    background-color: #343a40 !important; /* Fundo escuro */
+    color: #f8f9fa !important; /* Texto claro */
+    padding: 20px 0;
+    margin-top: 40px; /* Espaço superior */
 }

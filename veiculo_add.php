@@ -36,14 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("isids", $marca_id, $modelo, $ano, $preco, $imagem_nome);
 
             if ($stmt->execute()) {
+                $stmt->close();
                 header("Location: dashboard.php?status=success&message=Veículo cadastrado com sucesso!"); // Redireciona para o dashboard com sucesso
                 exit(); // É crucial usar exit() após header()
             } else {
                 error_log("Erro ao executar inserção de veículo: " . $stmt->error);
+                $stmt->close();
                 header("Location: veiculo_add.php?status=error"); // Redireciona com status de erro
                 exit();
             }
-            $stmt->close();
         } else {
             // Erro ao mover o arquivo
             header("Location: veiculo_add.php?status=upload_error");

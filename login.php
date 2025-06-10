@@ -12,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($senha)) {
         $erro = "Por favor, preencha todos os campos.";
     } else {
-        $stmt = $conn->prepare("SELECT id, senha FROM usuarios WHERE email = ?");
+        // Altera a query para selecionar também o 'nome' do usuário
+        $stmt = $conn->prepare("SELECT id, nome, senha FROM usuarios WHERE email = ?"); 
         
         if ($stmt === false) { // Verifica se a preparação da query falhou
             error_log("Erro na preparação da consulta de login: " . $conn->error);
@@ -26,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (password_verify($senha, $user['senha'])) {
                     $_SESSION['usuario_id'] = $user['id'];
                     $_SESSION['usuario_email'] = $email;
-                    // Redireciona para o dashboard.php
+                    $_SESSION['usuario_nome'] = $user['nome']; // <-- Adicionamos esta linha para salvar o nome!
+
+                    // Redireciona para o index.php (ou dashboard.php, se preferir)
                     header("Location: index.php");
                     exit(); // Garante que o script pare após o redirecionamento
                 } else {
@@ -45,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <link rel="stylesheet" href="css/logins.css">
 </head>
 <body>
@@ -63,22 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        // Este script não está fazendo nada útil, pois o texto é sempre 'Entrar'.
-        // Se você não planeja mudar o texto no hover via JS, pode remover este script.
-        // Se quiser um efeito de hover visual, use CSS (como já está no seu login.css).
-
-        /*
-        const loginBtn = document.getElementById('loginBtn');
-        
-        loginBtn.addEventListener('mouseover', function() {
-            this.innerHTML = 'Fazer Login'; // Exemplo: Muda o texto ao passar o mouse
-        });
-        
-        loginBtn.addEventListener('mouseout', function() {
-            this.innerHTML = 'Entrar'; // Volta o texto ao tirar o mouse
-        });
-        */
-        // Remova ou modifique o script acima se ele não for necessário ou funcional
+        // O script JavaScript que você tinha para o hover não é funcional como está.
+        // Se você quiser um efeito de hover visual, use CSS (como provavelmente já faz em seu 'logins.css').
+        // Este bloco de script pode ser removido ou modificado se não for necessário.
     </script>
 </body>
 </html>

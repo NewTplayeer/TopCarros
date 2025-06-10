@@ -46,9 +46,9 @@ if ($result_marcas_filtro) {
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                <?php if (isset($_SESSION['usuario_email'])): ?>
+                <?php if (isset($_SESSION['usuario_nome'])): ?>
                     <li class="nav-item">
-                        <span class="nav-link">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_email']) ?>!</span>
+                        <span class="nav-link">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_nome']) ?>!</span>
                     </li>
                 <?php else: ?>
                     <li class="nav-item">
