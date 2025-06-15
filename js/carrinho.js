@@ -120,8 +120,9 @@ function validarCEP(cep) {
 function carregarCarrinho() {
     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     const lista = document.getElementById("lista-carrinho");
+    if (!lista) return; // Sai da função se o elemento não existir
     const totalElement = document.getElementById("total");
-
+    
     // Limpa o conteúdo atual para evitar duplicações
     lista.innerHTML = ""; 
     let subtotal = 0;
@@ -219,7 +220,10 @@ function removerDoCarrinho(index) {
 }
 
 // Funções de frete
-document.getElementById("btn-buscar-cep").addEventListener("click", buscarEnderecoPorCEP);
+const buscarCepBtn = document.getElementById("btn-buscar-cep");
+if (buscarCepBtn) {
+    buscarCepBtn.addEventListener("click", buscarEnderecoPorCEP);
+}
 
 async function buscarEnderecoPorCEP() {
     const cep = document.getElementById("cep").value.replace(/\D/g, '');
