@@ -2,7 +2,7 @@
 require_once 'config.php'; // Inclua a conexão com o banco de dados
 
 // Consulta para buscar todos os veículos, juntando com o nome da marca
-$sql_veiculos = "SELECT v.id, m.nome AS marca_nome, v.modelo, v.ano, v.preco, v.imagem FROM veiculos v JOIN marcas m ON v.marca_id = m.id ORDER BY v.id DESC";
+$sql_veiculos = "SELECT v.id, m.nome AS marca_nome, v.marca_id, v.modelo, v.ano, v.preco, v.imagem FROM veiculos v JOIN marcas m ON v.marca_id = m.id ORDER BY v.id DESC";
 
 $result_veiculos = $conn->query($sql_veiculos);
 
@@ -91,43 +91,52 @@ if ($result_marcas_filtro) {
     </section>
 
     <section class="container py-5">
-        <h2 class="text-center mb-4">Catálogo de Veículos</h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-
-            <?php if (!empty($veiculos)): ?>
-                <?php foreach ($veiculos as $veiculo): ?>
-                    <div class="col car-card" data-marca="<?= htmlspecialchars($veiculo['marca_nome']) ?>">
-                        <div class="card h-100">
-                            <?php
-                            //  if (strtotime($veiculo['data_cadastro']) > strtotime('-24 hours')) {
-                                echo '<div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo</div>';
-                            //  }
-                            ?>
-                            <img src="uploads/<?= htmlspecialchars($veiculo['imagem']) ?>" class="card-img-top" alt="<?= htmlspecialchars($veiculo['modelo']) ?>">
-                            <div class="card-body text-center">
-                                <h5 class="card-title"><?= htmlspecialchars($veiculo['marca_nome']) ?> <?= htmlspecialchars($veiculo['modelo']) ?></h5>
-                                <p class="card-text">R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
-                                <button class="btn btn-outline-dark w-100"
-                                    onclick="adicionarAoCarrinho('<?= htmlspecialchars($veiculo['modelo']) ?>', <?= htmlspecialchars($veiculo['preco']) ?>)">Adicionar ao carrinho</button>
-                            </div>
-                        </div>
-                    </div>  
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="col-12 text-center">
-                    <p>Nenhum veículo encontrado no catálogo.</p>
-                </div>
-            <?php endif; ?>
-
+    <h2 class="text-center mb-4">Catálogo de Veículos</h2>
+    
+    <!-- Mensagem para quando não há veículos no catálogo (banco vazio) -->
+    <?php if (empty($veiculos)): ?>
+        <div class="col-12 text-center">
+            <p>Nenhum veículo encontrado no catálogo.</p>
         </div>
-    </section>
+    <?php endif; ?>
+    
+    <!-- Container principal dos veículos -->
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="container-veiculos">
+        <?php foreach ($veiculos as $veiculo): ?>
+            <div class="col car-card" data-marca="<?= htmlspecialchars($veiculo['marca_id']) ?>">
+                <div class="card h-100">
+                    <?php
+                    // if (strtotime($veiculo['data_cadastro']) > strtotime('-24 hours')) {
+                        echo '<div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Novo</div>';
+                    // }
+                    ?>
+                    <img src="uploads/<?= htmlspecialchars($veiculo['imagem']) ?>" class="card-img-top" alt="<?= htmlspecialchars($veiculo['modelo']) ?>">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><?= htmlspecialchars($veiculo['marca_nome']) ?> <?= htmlspecialchars($veiculo['modelo']) ?></h5>
+                        <p class="card-text">R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
+                        <button class="btn btn-outline-dark w-100"
+                            onclick="adicionarAoCarrinho('<?= htmlspecialchars($veiculo['modelo']) ?>', <?= htmlspecialchars($veiculo['preco']) ?>)">Adicionar ao carrinho</button>
+                    </div>
+                </div>
+            </div>  
+        <?php endforeach; ?>
+    </div>
+    
+    <!-- Mensagem para quando não há veículos com o filtro aplicado -->
+    <div id="nenhum-veiculo-mensagem" class="col-12 text-center mt-4" style="display: none;">
+        <div class="alert alert-warning">
+            Nenhum veículo encontrado para a marca selecionada.
+        </div>
+    </div>
+</section>
 
     <footer class="bg-dark text-white text-center py-4">
         <p>&copy; 2025 TopCarros. Todos os direitos reservados.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/scripts.js"></script>
+    <script src="js/carrinho.js"></script>
+
 </body>
 
 </html>
