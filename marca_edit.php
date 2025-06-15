@@ -1,3 +1,4 @@
+<!-- //Não é mais necessária -->
 <?php
 // marca_edit.php
 session_start();
