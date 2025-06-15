@@ -39,7 +39,7 @@ if ($result_marcas_filtro) {
 
     <?php session_start(); ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
+    <div class="container"> 
         <a class="navbar-brand" href="">TopCarros</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
