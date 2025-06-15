@@ -63,12 +63,13 @@ function listarMarcas($conn) {
         $nome_escaped = htmlspecialchars($row['nome']);
 
         echo "<li class='list-group-item d-flex justify-content-between align-items-center'>" .
-             "{$nome_escaped}" .
-             "<div>" .
-             " <a href='marca_edit.php?id={$id_escaped}' class='btn btn-sm btn-info me-2'>Editar</a>" .
-             " <a href='marca_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger' onclick='return confirm(\"Tem certeza que deseja excluir esta marca? Isso também excluirá veículos e anúncios associados a ela!\");'>Excluir</a>" .
-             "</div>" .
-             "</li>";
+     "{$nome_escaped}" .
+     "<div>" .
+     " <button class='btn btn-sm btn-info me-2 btn-editar-marca' data-id='{$id_escaped}' data-nome='{$nome_escaped}' data-bs-toggle='modal' data-bs-target='#modalEditarMarca'>Editar</button>" .
+     " <a href='marca_delete.php?id={$id_escaped}' class='btn btn-sm btn-danger' onclick='return confirm(\"Tem certeza que deseja excluir esta marca? Isso também excluirá veículos e anúncios associados a ela!\");'>Excluir</a>" .
+     "</div>" .
+     "</li>";
+
     }
     echo "</ul>";
 }
@@ -145,6 +146,23 @@ function listarAnuncios($conn) {
 }
 
 ?>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_marca'])) {
+  $id = $_POST['id'] ?? null;
+  $nome = trim($_POST['nome'] ?? '');
+
+  if ($id && $nome !== '') {
+    require 'config.php';
+    $stmt = $conn->prepare("UPDATE marcas SET nome = ? WHERE id = ?");
+    $stmt->bind_param("si", $nome, $id);
+    $stmt->execute();
+    header("Location: dashboard.php?marca_editada=1");
+    exit();
+  }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -153,6 +171,8 @@ function listarAnuncios($conn) {
     <title>Dashboard - TopCarros</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <script src="./js/scriptCrud.js"></script>
+    
 </head>
 <body>
 <div class="container container-dashboard">
@@ -196,6 +216,68 @@ function listarAnuncios($conn) {
         <a href="anuncio_add.php" class="btn btn-primary mb-3">Adicionar Novo Anúncio</a>
         <?php listarAnuncios($conn); ?>
     </div>
+
+
+    <!-- //Modais -->
+     <!-- Modal Editar Marca -->
+<!-- Modal Editar Marca -->
+<div class="modal fade" id="modalEditarMarca" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST">
+        <input type="hidden" name="editar_marca" value="1">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Marca</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id" id="editMarcaId">
+          <div class="mb-3">
+            <label for="editMarcaNome">Nome da Marca</label>
+            <input type="text" name="nome" id="editMarcaNome" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalSucesso" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-success text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Sucesso</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Marca editada com sucesso!
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php if (isset($_GET['marca_editada'])): ?>
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+  const modalSucesso = new bootstrap.Modal(document.getElementById('modalSucesso'));
+  modalSucesso.show();
+
+  // Remove o parâmetro da URL para não exibir o modal ao atualizar a página
+  if (window.history.replaceState) {
+    const url = new URL(window.location);
+    url.searchParams.delete('marca_editada');
+    window.history.replaceState({}, document.title, url.toString());
+  }
+});
+
+</script>
+<?php endif; ?>
+
+
+
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
