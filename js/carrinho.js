@@ -1,4 +1,46 @@
 document.addEventListener("DOMContentLoaded", function() {
+    const filtroMarca = document.getElementById("filtroMarca");
+    const mensagem = document.getElementById("nenhum-veiculo-mensagem");
+    
+
+    mensagem.style.display = "none";
+    
+    if (filtroMarca) {
+        filtroMarca.addEventListener("change", function() {
+            const marcaId = this.value;
+            filtrarVeiculosPorMarca(marcaId);
+        });
+        
+        if (filtroMarca.value) {
+            filtrarVeiculosPorMarca(filtroMarca.value);
+        }
+    }
+});
+
+function filtrarVeiculosPorMarca(marcaId) {
+    const cards = document.querySelectorAll(".car-card");
+    const mensagem = document.getElementById("nenhum-veiculo-mensagem");
+    let algumVeiculoVisivel = false;
+    
+    cards.forEach(card => {
+        if (marcaId === "" || card.getAttribute("data-marca") === marcaId) {
+            card.style.display = "block";
+            algumVeiculoVisivel = true;
+        } else {
+            card.style.display = "none";
+        }
+    });
+    
+
+    if (marcaId !== "" && !algumVeiculoVisivel && cards.length > 0) {
+        mensagem.style.display = "block";
+    } else {
+        mensagem.style.display = "none";
+    }
+}
+// logo acima é o js de filtro de marca pelo Id
+
+document.addEventListener("DOMContentLoaded", function() {
     carregarCarrinho();
 
     // Se o frete não estiver definido na sessionStorage, inicializa como "A calcular"
@@ -449,6 +491,7 @@ function adicionarAoCarrinho(nome, preco) {
             qtd: 1 
         });
     }
+    
 
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
     alert(`${nome} adicionado ao carrinho!`);
