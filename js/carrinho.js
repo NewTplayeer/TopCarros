@@ -120,10 +120,9 @@ function validarCEP(cep) {
 function carregarCarrinho() {
     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     const lista = document.getElementById("lista-carrinho");
-    if (!lista) return; // Sai da função se o elemento não existir
+    if (!lista) return;
     const totalElement = document.getElementById("total");
     
-    // Limpa o conteúdo atual para evitar duplicações
     lista.innerHTML = ""; 
     let subtotal = 0;
 
@@ -166,6 +165,16 @@ function carregarCarrinho() {
 
     const total = subtotal + frete.valor;
 
+    // Formatação condicional do valor do frete
+    let valorFreteFormatado;
+    if (frete.tipo === "Retirada na Loja") {
+        valorFreteFormatado = 'Grátis';
+    } else if (frete.tipo === "A calcular") {
+        valorFreteFormatado = 'A calcular';
+    } else {
+        valorFreteFormatado = formatarMoeda(frete.valor);
+    }
+
     lista.insertAdjacentHTML('beforeend', `
         <div class="row mt-4">
             <div class="col-md-6 offset-md-6">
@@ -179,7 +188,7 @@ function carregarCarrinho() {
                         <div id="resumo-frete">
                             <div class="d-flex justify-content-between">
                                 <span>Frete (${frete.tipo}):</span>
-                                <span>${frete.valor > 0 ? formatarMoeda(frete.valor) : frete.tipo === "Retirada na Loja" ? 'Grátis' : 'A calcular'}</span>
+                                <span>${valorFreteFormatado}</span>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <span>Prazo estimado:</span>

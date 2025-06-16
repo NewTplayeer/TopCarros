@@ -64,6 +64,9 @@ if ($result_marcas_filtro) {
                     <a class="nav-link" href="Carrinho.php">Carrinho</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="historico_compras.php">Histórico de Compras</a>
+                </li>
+                <li class="nav-item">
                         <a class="nav-link" href="logout.php">Sair</a>
                     </li>
             </ul>
