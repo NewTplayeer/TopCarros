@@ -9,19 +9,17 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 
-// Adicione debug para verificar o ID do usuário
 error_log("Usuário ID: " . $usuario_id);
 
-// Consulta melhorada com tratamento de erros
 try {
-    $sql_compras = "SELECT c.id, c.data_compra, c.valor_total, c.status,
+    $sql_compras = "SELECT c.id, c.data_compra, c.valor_total, c.status, c.tipo_frete, c.valor_frete, -- Adicionadas colunas de frete
                    GROUP_CONCAT(v.modelo SEPARATOR ', ') AS veiculos,
                    GROUP_CONCAT(m.nome SEPARATOR ', ') AS marcas
                    FROM compras c
                    JOIN compra_itens ci ON c.id = ci.compra_id
                    JOIN veiculos v ON ci.veiculo_id = v.id
                    JOIN marcas m ON v.marca_id = m.id
-                   WHERE c.usuario_id = ?
+                   WHERE c.usuario_id = ? AND c.status != 'carrinho' -- Excluir carrinhos ativos do histórico
                    GROUP BY c.id
                    ORDER BY c.data_compra DESC";
 
@@ -38,7 +36,6 @@ try {
     $result_compras = $stmt->get_result();
     $compras = $result_compras->fetch_all(MYSQLI_ASSOC);
     
-    // Debug: ver resultados da consulta
     error_log("Número de compras encontradas: " . count($compras));
     
 } catch (Exception $e) {
@@ -79,7 +76,7 @@ try {
                         <tr>
                             <th>Data da Compra</th>
                             <th>Veículos</th>
-                            <th>Valor Total</th>
+                            <th>Valor Total (com Frete)</th>
                             <th>Status</th>
                             <th>Ações</th>
                         </tr>
@@ -92,7 +89,9 @@ try {
                                     <?= htmlspecialchars($compra['marcas']) ?> - 
                                     <?= htmlspecialchars($compra['veiculos']) ?>
                                 </td>
-                                <td>R$ <?= number_format($compra['valor_total'], 2, ',', '.') ?></td>
+                                <td>
+                                    R$ <?= number_format($compra['valor_total'] + $compra['valor_frete'], 2, ',', '.') ?>
+                                </td>
                                 <td>
                                     <span class="status-<?= $compra['status'] ?>">
                                         <?= ucfirst($compra['status']) ?>

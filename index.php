@@ -118,7 +118,7 @@ if ($result_marcas_filtro) {
                         <h5 class="card-title"><?= htmlspecialchars($veiculo['marca_nome']) ?> <?= htmlspecialchars($veiculo['modelo']) ?></h5>
                         <p class="card-text">R$ <?= number_format($veiculo['preco'], 2, ',', '.') ?></p>
                         <button class="btn btn-outline-dark w-100"
-                            onclick="adicionarAoCarrinho('<?= htmlspecialchars($veiculo['modelo']) ?>', <?= htmlspecialchars($veiculo['preco']) ?>)">Adicionar ao carrinho</button>
+    onclick="adicionarAoCarrinho(<?= htmlspecialchars($veiculo['id']) ?>)">Adicionar ao carrinho</button>
                     </div>
                 </div>
             </div>  

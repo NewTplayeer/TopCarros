@@ -1,60 +1,63 @@
 <?php
-require_once 'config.php';
-session_start();
+require_once 'config.php'; // Inclui o arquivo de configuração do banco de dados
+session_start(); // Inicia a sessão
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
-    exit();
+if (!isset($_SESSION['usuario_id'])) { // Verifica se o usuário está logado
+    header("Location: login.php"); // Redireciona para a página de login se não estiver logado
+    exit(); // Encerra o script
 }
 
-if (!isset($_GET['id'])) {
-    header("Location: historico_compras.php");
-    exit();
+if (!isset($_GET['id'])) { // Verifica se o ID da compra foi fornecido na URL
+    header("Location: historico_compras.php"); // Redireciona para o histórico de compras se não houver ID
+    exit(); // Encerra o script
 }
 
-$compra_id = $_GET['id'];
-$usuario_id = $_SESSION['usuario_id'];
+$compra_id = $_GET['id']; // Obtém o ID da compra da URL
+$usuario_id = $_SESSION['usuario_id']; // Obtém o ID do usuário logado da sessão
 
-// Consulta atualizada para incluir o frete
+// Consulta para buscar os detalhes da compra, incluindo tipo e valor do frete
 $sql_compra = "SELECT c.id, c.data_compra, c.valor_total, c.status, c.tipo_frete, c.valor_frete
                FROM compras c
                WHERE c.id = ? AND c.usuario_id = ?";
-$stmt = $conn->prepare($sql_compra);
-$stmt->bind_param("ii", $compra_id, $usuario_id);
-$stmt->execute();
-$result_compra = $stmt->get_result();
-$compra = $result_compra->fetch_assoc();
+$stmt = $conn->prepare($sql_compra); // Prepara a consulta SQL
+$stmt->bind_param("ii", $compra_id, $usuario_id); // Associa os parâmetros (ID da compra e ID do usuário)
+$stmt->execute(); // Executa a consulta
+$result_compra = $stmt->get_result(); // Obtém o resultado da consulta
+$compra = $result_compra->fetch_assoc(); // Busca a linha do resultado como um array associativo
 
-if (!$compra) {
-    header("Location: historico_compras.php");
-    exit();
+if (!$compra) { // Se a compra não for encontrada (ou não pertencer ao usuário)
+    header("Location: historico_compras.php"); // Redireciona para o histórico de compras
+    exit(); // Encerra o script
 }
 
-// Consulta para os itens da compra
+// Consulta para os itens (veículos) da compra
 $sql_itens = "SELECT v.id, m.nome AS marca, v.modelo, v.ano, ci.preco_unitario, v.imagem
               FROM compra_itens ci
               JOIN veiculos v ON ci.veiculo_id = v.id
               JOIN marcas m ON v.marca_id = m.id
               WHERE ci.compra_id = ?";
-$stmt = $conn->prepare($sql_itens);
-$stmt->bind_param("i", $compra_id);
-$stmt->execute();
-$result_itens = $stmt->get_result();
-$itens = $result_itens->fetch_all(MYSQLI_ASSOC);
+$stmt = $conn->prepare($sql_itens); // Prepara a consulta SQL
+$stmt->bind_param("i", $compra_id); // Associa o parâmetro (ID da compra)
+$stmt->execute(); // Executa a consulta
+$result_itens = $stmt->get_result(); // Obtém o resultado da consulta
+$itens = $result_itens->fetch_all(MYSQLI_ASSOC); // Busca todas as linhas como um array associativo
 
-// Calcular valor total + frete
+// Calcular valor total da compra + valor do frete
 $valor_total_com_frete = $compra['valor_total'] + $compra['valor_frete'];
 
-// Mapear tipos de frete para nomes amigáveis
+// Mapear tipos de frete para nomes amigáveis.
+// As CHAVES deste array AGORA CORRESPONDEM EXATAMENTE aos valores que são salvos
+// na coluna `tipo_frete` do banco de dados (ex: 'Guincho Plataforma').
 $tipos_frete = [
-    'retirada_loja' => 'Retirada na Loja',
-    'transporte_proprio' => 'Transporte Próprio',
-    'transportadora' => 'Transportadora'
+    'Retirada na Loja' => 'Retirada na Loja',
+    'Transporte Especializado' => 'Transporte Especializado',
+    'Guincho Plataforma' => 'Guincho Plataforma'
 ];
 
-// Função para formatar valor do frete
+// Função para formatar o valor do frete
 function formatarValorFrete($tipo_frete, $valor_frete) {
-    if ($tipo_frete === 'retirada_loja') {
+    // A condição agora compara com o nome completo do tipo de frete salvo no BD
+    if ($tipo_frete === 'Retirada na Loja') {
         return 'Grátis';
     }
     return 'R$ ' . number_format($valor_frete, 2, ',', '.');
@@ -112,22 +115,27 @@ function formatarValorFrete($tipo_frete, $valor_frete) {
                         <p><strong>Total:</strong> R$ <?= number_format($valor_total_com_frete, 2, ',', '.') ?></p>
                     </div>
                     <div class="col-md-3">
-                        <p><strong>Frete:</strong> <?= $tipos_frete[$compra['tipo_frete']] ?></p>
+                        <p>
+                            <strong>Frete:</strong> 
+                            <?= $tipos_frete[$compra['tipo_frete']] ?? $compra['tipo_frete'] ?>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Seção de informações do frete -->
         <div class="frete-info mb-4">
             <h5>Informações de Frete</h5>
             <div class="row">
                 <div class="col-md-4">
-                    <p><strong>Tipo de Frete:</strong> <?= $tipos_frete[$compra['tipo_frete']] ?></p>
+                    <p>
+                        <strong>Tipo de Frete:</strong> 
+                        <?= $tipos_frete[$compra['tipo_frete']] ?? $compra['tipo_frete'] ?>
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <p><strong>Valor do Frete:</strong> 
-                        <span class="<?= $compra['tipo_frete'] === 'retirada_loja' ? 'valor-frete-gratis' : '' ?>">
+                        <span class="<?= $compra['tipo_frete'] === 'Retirada na Loja' ? 'valor-frete-gratis' : '' ?>">
                             <?= formatarValorFrete($compra['tipo_frete'], $compra['valor_frete']) ?>
                         </span>
                     </p>
