@@ -47,6 +47,9 @@
     <div id="lista-carrinho" class="mt-4">
       </div>
 
+      <div id="resumoPedidoContainer" class="container my-5">
+    </div>
+    
     <hr />
 
     <div class="row mb-4">

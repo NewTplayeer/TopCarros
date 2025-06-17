@@ -50,6 +50,18 @@ if ($result_marcas_filtro) {
                     <li class="nav-item">
                         <span class="nav-link">Bem-vindo, <?= htmlspecialchars($_SESSION['usuario_nome']) ?>!</span>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.php">DashBoard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Carrinho.php">Carrinho</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="historico_compras.php">Histórico de Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Sair</a>
+                    </li>
                 <?php else: ?>
                     <li class="nav-item">
                         <a class="nav-link" href="login.php">Login</a>
@@ -58,17 +70,6 @@ if ($result_marcas_filtro) {
                         <a class="nav-link" href="register.php">Registro</a>
                     </li>
                 <?php endif; ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="dashboard.php">DashBoard</a>
-                <li class="nav-item">
-                    <a class="nav-link" href="Carrinho.php">Carrinho</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="historico_compras.php">Histórico de Compras</a>
-                </li>
-                <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Sair</a>
-                    </li>
             </ul>
         </div>
     </div>

@@ -54,7 +54,7 @@ $anuncios = $result->fetch_all(MYSQLI_ASSOC);
         <h1>Meus Anúncios</h1>
 
         <div class="top-actions">
-            <a href="anunciar.php" class="btn btn-primary">Criar Novo Anúncio</a>
+            <a href="anuncio_add.php" class="btn btn-primary">Criar Novo Anúncio</a>
             </div>
 
         <?php
@@ -88,7 +88,7 @@ $anuncios = $result->fetch_all(MYSQLI_ASSOC);
                             <h3><?= htmlspecialchars($anuncio['marca']) ?> <?= htmlspecialchars($anuncio['modelo']) ?> (<?= htmlspecialchars($anuncio['ano']) ?>)</h3>
                             <p class="preco">R$ <?= number_format($anuncio['preco'], 2, ',', '.') ?></p>
                             <div class="acoes">
-                                <a href="excluir_anuncio.php?id=<?= $anuncio['anuncio_id'] ?>" class="delete-link" onclick="return confirm('Tem certeza que deseja excluir este anúncio? Esta ação é irreversível.');">Excluir</a>
+                                <a href="anuncio_delete.php?id=<?= $anuncio['anuncio_id'] ?>" class="delete-link" onclick="return confirm('Tem certeza que deseja excluir este anúncio? Esta ação é irreversível.');">Excluir</a>
                             </div>
                         </div>
                     </div>

@@ -219,7 +219,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_marca'])) {
 
 
     <!-- //Modais -->
-     <!-- Modal Editar Marca -->
 <!-- Modal Editar Marca -->
 <div class="modal fade" id="modalEditarMarca" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">

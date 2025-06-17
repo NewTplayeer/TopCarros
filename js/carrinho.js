@@ -104,11 +104,12 @@ function validarCEP(cep) {
     return cep.length === 8; // Retorna true se o CEP tiver 8 dígitos
 }
 
-// **MODIFICADO: carregarCarrinho para buscar dados do backend**
+// **MODIFICADO: carregarCarrinho para buscar dados do backend E chamar a atualização do resumo**
 async function carregarCarrinho() {
     const lista = document.getElementById("lista-carrinho");
     if (!lista) return;
-    const totalElement = document.getElementById("total");
+    // O totalElement (do botão de finalizar compra) será atualizado na função de resumo.
+    // const totalElement = document.getElementById("total"); 
 
     lista.innerHTML = ""; // Limpa o conteúdo atual da lista do carrinho
 
@@ -125,12 +126,12 @@ async function carregarCarrinho() {
         if (!data.success) {
             console.error("Erro ao carregar carrinho:", data.message);
             lista.innerHTML = `<p class="text-center text-danger">Erro ao carregar seu carrinho: ${data.message}</p>`;
-            totalElement.textContent = formatarMoeda(0);
+            // Atualiza o resumo do pedido mesmo em caso de erro para mostrar 0
+            atualizarResumoDoPedidoNaPagina(0, null, 0); 
             return;
         }
 
         const carrinho = data.carrinho || [];
-        // Remova a linha 'let subtotal = 0;' daqui, ou use-a apenas para o cálculo de exibição dos itens individuais.
         // O subtotal REAL deve vir de data.cart_total, que é o total calculado no backend.
 
         if (carrinho.length === 0) {
@@ -140,7 +141,6 @@ async function carregarCarrinho() {
                 const preco = item.preco;
                 const qtd = item.qtd || 1;
                 const subtotalItem = preco * qtd;
-                // subtotal += subtotalItem; // Não acumule aqui se o subtotal já vem do backend
 
                 const itemHTML = `
                     <div class="row align-items-center mb-3 border-bottom pb-3">
@@ -173,53 +173,19 @@ async function carregarCarrinho() {
         // Calcula o total geral (subtotal dos itens do backend + valor do frete da sessionStorage)
         const totalFinalComFrete = subtotalItensBackend + frete.valor;
 
-        // Formata o valor do frete para exibição
-        let valorFreteFormatado;
-        if (frete.tipo === "Retirada na Loja") {
-            valorFreteFormatado = 'Grátis';
-        } else if (frete.tipo === "A calcular") {
-            valorFreteFormatado = 'A calcular';
-        } else {
-            valorFreteFormatado = formatarMoeda(frete.valor);
-        }
-
-        // Adiciona o resumo do pedido (subtotal, frete, total) ao final da lista do carrinho
-        lista.insertAdjacentHTML('beforeend', `
-            <div class="row mt-4">
-                <div class="col-md-6 offset-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Resumo do Pedido</h5>
-                            <div class="d-flex justify-content-between">
-                                <span>Subtotal:</span>
-                                <span>${formatarMoeda(subtotalItensBackend)}</span>
-                            </div>
-                            <div id="resumo-frete">
-                                <div class="d-flex justify-content-between">
-                                    <span>Frete (${frete.tipo}):</span>
-                                    <span>${valorFreteFormatado}</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Prazo estimado:</span>
-                                    <span>${frete.prazo}</span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-between fw-bold">
-                                <span>Total:</span>
-                                <span>${formatarMoeda(totalFinalComFrete)}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `);
-        totalElement.textContent = formatarMoeda(totalFinalComFrete); // Atualiza o total exibido no botão "Finalizar Compra"
+        // *** AQUI É A CHAMADA PARA ATUALIZAR O RESUMO DO PEDIDO NA PÁGINA ***
+        // Esta função agora é responsável por gerar e injetar o HTML do resumo
+        atualizarResumoDoPedidoNaPagina(subtotalItensBackend, frete, totalFinalComFrete);
+        
+        // Remove a linha que atualizava o totalElement diretamente aqui,
+        // pois a função `atualizarResumoDoPedidoNaPagina` já faz isso para o elemento do resumo.
+        // totalElement.textContent = formatarMoeda(totalFinalComFrete); 
 
     } catch (error) {
         console.error("Erro na comunicação com o servidor:", error);
         lista.innerHTML = '<p class="text-center text-danger">Não foi possível carregar seu carrinho. Tente novamente mais tarde.</p>';
-        totalElement.textContent = formatarMoeda(0);
+        // Atualiza o resumo do pedido mesmo em caso de erro de comunicação
+        atualizarResumoDoPedidoNaPagina(0, null, 0); 
     }
 }
 
@@ -417,11 +383,11 @@ function exibirOpcoesFrete(fretes, isLocal) {
             <div class="card-body">
                 <div class="form-check">
                     <input class="form-check-input" type="radio"
-                            name="opcaoFrete" id="frete-${frete.nome.toLowerCase().replace(/\s/g, '-')}"
-                            value="${frete.nome}"
-                            data-valor="${frete.valor}"
-                            data-prazo="${frete.prazo}"
-                            ${frete.nome === currentSelectedFrete.tipo ? 'checked' : ''}
+                                name="opcaoFrete" id="frete-${frete.nome.toLowerCase().replace(/\s/g, '-')}"
+                                value="${frete.nome}"
+                                data-valor="${frete.valor}"
+                                data-prazo="${frete.prazo}"
+                                ${frete.nome === currentSelectedFrete.tipo ? 'checked' : ''}
                     >
                     <label class="form-check-label" for="frete-${frete.nome.toLowerCase().replace(/\s/g, '-')}">
                         <h5 class="d-inline">${frete.nome}</h5>
@@ -453,9 +419,9 @@ function exibirOpcoesFrete(fretes, isLocal) {
                         <div class="card-body">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="opcaoFrete"
-                                        id="retiradaLoja" value="Retirada na Loja"
-                                        data-valor="0" data-prazo="Imediato"
-                                        ${"Retirada na Loja" === currentSelectedFrete.tipo ? 'checked' : ''}>
+                                         id="retiradaLoja" value="Retirada na Loja"
+                                         data-valor="0" data-prazo="Imediato"
+                                         ${"Retirada na Loja" === currentSelectedFrete.tipo ? 'checked' : ''}>
                                 <label class="form-check-label" for="retiradaLoja">
                                     <h5 class="d-inline">Retirada na Loja</h5>
                                 </label>
@@ -632,5 +598,101 @@ async function getCartFromServer() {
         console.error("Erro de rede ao buscar carrinho:", error);
         // Retorna um objeto de carrinho vazio em caso de erro de rede
         return { carrinho: [], cart_total: 0, frete: { tipo: "A calcular", valor: 0, prazo: "-" } };
+    }
+}
+
+// **FUNÇÃO ADICIONADA: `atualizarResumoDoPedidoNaPagina`**
+/**
+ * Atualiza o bloco de resumo do pedido na página principal.
+ * Esta função deve ser chamada por `carregarCarrinho` e outras funções que alteram o carrinho/frete.
+ * @param {number} subtotalItensBackend - O subtotal dos itens do carrinho.
+ * @param {object|null} frete - Objeto de frete com {tipo, prazo, valor}, ou null se não houver frete.
+ * @param {number} totalFinalComFrete - O total final incluindo subtotal e frete.
+ */
+function atualizarResumoDoPedidoNaPagina(subtotalItensBackend, frete, totalFinalComFrete) {
+    const resumoContainer = document.getElementById('resumoPedidoContainer');
+
+    if (!resumoContainer) {
+        console.error('Elemento #resumoPedidoContainer não encontrado no HTML. Certifique-se de que o div está presente.');
+        return;
+    }
+
+    // Lógica para determinar o HTML do frete
+    let freteHTML = '';
+    const valorFrete = frete ? frete.valor : 0;
+    const valorFreteFormatado = formatarMoeda(valorFrete);
+
+    if (frete && frete.tipo && frete.prazo) {
+        if (frete.tipo === "Retirada na Loja") { // Casos específicos de frete
+            freteHTML = `
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Frete (${frete.tipo}):</span>
+                    <span class="text-success fw-bold">Grátis</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Prazo estimado:</span>
+                    <span>${frete.prazo}</span>
+                </div>
+            `;
+        } else if (frete.tipo === "A calcular") { // Caso do frete ainda não calculado
+             freteHTML = `
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Frete:</span>
+                    <span class="text-muted">A calcular</span>
+                </div>
+            `;
+        }
+        else { // Frete pago normal
+            freteHTML = `
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Frete (${frete.tipo}):</span>
+                    <span>${valorFreteFormatado}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Prazo estimado:</span>
+                    <span>${frete.prazo} dias úteis</span>
+                </div>
+            `;
+        }
+    } else {
+        // Frete completamente ausente ou inválido
+        freteHTML = `
+            <div class="d-flex justify-content-between mb-1">
+                <span>Frete:</span>
+                <span class="text-muted">Não disponível</span>
+            </div>
+        `;
+    }
+
+    // Gera o HTML completo do resumo
+    const resumoHTML = `
+        <div class="row justify-content-center"> <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5"> <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-3">Resumo do Pedido</h5>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold">Subtotal dos itens:</span>
+                            <span>${formatarMoeda(subtotalItensBackend)}</span>
+                        </div>
+                        
+                        ${freteHTML} <hr class="my-3">
+                        
+                        <div class="d-flex justify-content-between fw-bold fs-5 text-primary">
+                            <span>Total geral:</span>
+                            <span>${formatarMoeda(totalFinalComFrete)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Atualiza o conteúdo do contêiner do resumo
+    resumoContainer.innerHTML = resumoHTML;
+
+    // Atualiza o elemento de "total" principal, se ele existir (ex: no botão de finalizar compra)
+    const totalElement = document.getElementById("total"); 
+    if (totalElement) {
+        totalElement.textContent = formatarMoeda(totalFinalComFrete);
     }
 }
